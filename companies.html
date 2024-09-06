@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Cards</title>
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+
+  <style>
+    .gradient {
+      background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+    }
+    
+  </style>
+</head>
+<body class="bg-gray-100 p-10">
+
+  <div id="company-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Dynamic company cards container -->
+  </div>
+
+  <script>
+
+    fetch('companies.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); 
+      })
+      .then(data => {
+        console.log('Fetched data:', data); 
+
+        const companies = data.companies;
+
+        const companyContainer = document.getElementById("company-container");
+        
+        companies.forEach(company => {
+          const card = `
+  <a href="index.html?id=${company.id}" class="block max-w-xs h-full bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
+    <div class="flex flex-col h-full justify-between items-center text-center p-4">
+      
+      <div class="flex-grow">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          ${company.companyName}
+        </h5>
+
+    
+        <div class="h-50  w-full">
+          <p class="mb-4 mt-4 font-normal text-black dark:text-gray-400 text-center">
+            ${company.description}
+          </p>
+        </div>
+      </div>
+
+      <div class="inline-flex items-center px-3 py-2 my-2 text-sm font-medium text-center text-white rounded-lg gradient hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-blue-300">
+  View Details
+</div>
+
+      
+    </div>
+  </a>`;
+
+          companyContainer.innerHTML += card;
+        });
+      })
+      .catch(error => {
+        console.error('Error loading companies.json:', error);
+      });
+  </script>
+  
+</body>
+</html>
